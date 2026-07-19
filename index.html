@@ -1,0 +1,640 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>REINA PRODUCTION — High-End Creative Agency</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&family=Inter:wght@300;400;500&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body { font-family: 'Inter', sans-serif; background:#000; color:#fff; overflow-x:hidden; -webkit-font-smoothing: antialiased; }
+  .mono { font-family:'IBM Plex Mono', monospace; }
+
+  h1, h2, h3 {
+    font-family: 'Cormorant Garamond', serif;
+    font-weight: 300;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+  }
+
+  /* ============ NAV ============ */
+  .nav {
+    position:sticky; top:0; z-index:50; height:76px; background:#000;
+    display:flex; align-items:center; justify-content:space-between;
+    padding:0 40px; border-bottom:1px solid rgba(255,255,255,0.08);
+  }
+  .nav img { height:42px; }
+  .nav-meta { font-size:11px; letter-spacing:0.08em; color:rgba(255,255,255,0.4); text-transform:uppercase; }
+  .nav-links { display:flex; gap:32px; }
+  .nav-links a { color:#fff; text-decoration:none; font-size:11px; letter-spacing:0.1em; text-transform:uppercase; font-weight:400; cursor:pointer; }
+  .nav-links a:hover { color:rgba(255,255,255,0.5); }
+
+  #homepage-view { display:block; }
+
+  /* ============ HERO ============ */
+  .hero {
+    position:relative; min-height:88vh; background:#000; color:#fff;
+    display:flex; flex-direction:column; justify-content:center;
+    padding:0 80px;
+  }
+  .hero-studio-tag {
+    font-family:'IBM Plex Mono',monospace; font-size:11px; letter-spacing:0.15em;
+    color:rgba(255,255,255,0.4); text-transform:uppercase; margin-bottom:32px;
+  }
+  .hero h1 { font-size:90px; line-height:0.95; letter-spacing:-0.01em; margin-bottom:48px; max-width:900px; }
+  .hero p {
+    font-family:'Cormorant Garamond', serif; font-style:italic; font-weight:300;
+    font-size:26px; line-height:1.5; color:rgba(255,255,255,0.7);
+    max-width:580px; margin-bottom:48px; text-transform:none;
+  }
+  .btn {
+    display:inline-flex; align-items:center; gap:10px; width:fit-content;
+    font-family:'IBM Plex Mono',monospace; font-size:11px; letter-spacing:0.08em;
+    text-transform:uppercase; padding:15px 28px; border:1px solid rgba(255,255,255,0.4);
+    color:#fff; text-decoration:none; transition:all 0.25s; cursor:pointer; background:none;
+  }
+  .btn:hover { background:#fff; color:#000; border-color:#fff; }
+
+  .spine {
+    position:absolute; right:18px; top:50%; transform:translateY(-50%) rotate(180deg);
+    writing-mode:vertical-rl; font-family:'IBM Plex Mono',monospace; font-size:10px;
+    letter-spacing:0.2em; color:rgba(255,255,255,0.25); text-transform:uppercase;
+  }
+
+  /* ============ PRODUCTION PORTFOLIO GRID (light) ============ */
+  .looks { background:#EDEDEA; padding:110px 60px 120px; color:#111; }
+  .looks-head { display:flex; justify-content:space-between; align-items:flex-end; margin-bottom:56px; }
+  .looks-head .mono { font-size:11px; letter-spacing:0.1em; color:#666; text-transform:uppercase; }
+  .looks-head h2 { font-size:42px; color:#111; }
+  .looks-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:24px; }
+
+  .look-card { background:#fff; position:relative; aspect-ratio:3/4; overflow:hidden; cursor:pointer; }
+  .look-card .ph {
+    position:absolute; inset:0; background-size:cover; background-position:center;
+    transition:transform 0.6s cubic-bezier(0.25, 1, 0.5, 1);
+  }
+  .look-card:hover .ph { transform:scale(1.04); }
+  .look-card .tag {
+    position:absolute; bottom:20px; left:20px; font-family:'IBM Plex Mono',monospace;
+    font-size:11px; letter-spacing:0.08em; color:#fff; text-transform:uppercase;
+    background:rgba(0,0,0,0.7); padding:6px 14px; backdrop-filter:blur(4px);
+  }
+
+  /* ============ VISION CARD + PANEL ============ */
+  .vision-card { border:1px solid rgba(0,0,0,0.08); }
+  .vision-card .tag.vision-tag { background:rgba(0,0,0,0.75); line-height:1.5; }
+  .vision-card .tag.vision-tag strong { display:block; font-size:12px; letter-spacing:0.1em; }
+  .vision-card .tag.vision-tag small { font-family:'Inter',sans-serif; font-size:11px; text-transform:none; opacity:0.75; letter-spacing:0; }
+  .vision-card.active { outline:2px solid #111; outline-offset:-2px; }
+
+  .vision-panel {
+    display:none; overflow:hidden; max-height:0; opacity:0;
+    transition:max-height 0.5s ease, opacity 0.5s ease;
+    background:#fff; border:1px solid rgba(0,0,0,0.08); margin-top:24px;
+  }
+  .vision-panel.open { display:block; max-height:600px; opacity:1; }
+  .vision-panel-inner { padding:48px; }
+  .vision-panel-inner .mono { font-size:11px; letter-spacing:0.1em; color:#666; text-transform:uppercase; }
+  .vision-panel-inner h3 { font-size:28px; color:#111; margin:14px 0 16px; }
+  .vision-desc { font-family:'Inter',sans-serif; font-size:14px; line-height:1.6; color:#3a3a38; max-width:520px; margin-bottom:36px; }
+  .vision-upload-row { display:grid; grid-template-columns:1fr 1fr; gap:32px; align-items:end; }
+  .vision-panel .file-input-wrapper { position:relative; display:block; }
+  .vision-panel .file-btn {
+    border:1px dashed rgba(0,0,0,0.25); color:#111; padding:16px 20px;
+    font-family:'IBM Plex Mono',monospace; font-size:12px; text-transform:uppercase;
+    text-align:center; display:block; cursor:pointer; transition:border-color 0.25s;
+  }
+  .vision-panel .file-btn:hover { border-color:#111; }
+  .vision-panel input[type="file"] { position:absolute; inset:0; opacity:0; cursor:pointer; }
+  .vision-panel .input-group label { font-family:'IBM Plex Mono',monospace; font-size:11px; letter-spacing:0.05em; color:#666; text-transform:uppercase; display:block; margin-bottom:12px; }
+  .vision-panel .input-group input { width:100%; background:none; border:none; border-bottom:1px solid rgba(0,0,0,0.2); padding:12px 0; color:#111; font-family:'Inter',sans-serif; font-size:14px; }
+  .vision-panel .input-group input:focus { outline:none; border-color:#111; }
+  .vision-confirm { display:block; margin-top:24px; color:#666; min-height:1em; }
+
+  /* ============ PAGE TRANSITION ANIMATION ============ */
+  #homepage-view {
+    transition:opacity 0.5s ease, transform 0.5s ease; opacity:1; transform:translateY(0);
+  }
+  #homepage-view.leaving { opacity:0; transform:translateY(-24px); }
+  .portfolio-view-wrapper {
+    opacity:0; transform:translateY(28px);
+    transition:opacity 0.7s ease, transform 0.7s ease;
+  }
+  .portfolio-view-wrapper.visible { opacity:1; transform:translateY(0); }
+
+  /* ============ MANIFESTO SPLIT ============ */
+  .manifesto-section { background:#EDEDEA; padding-bottom:120px; }
+  .split { display:grid; grid-template-columns:1fr 1.1fr; background:#EDEDEA; min-height:85vh; max-width:1440px; margin:0 auto; }
+  .split .txt { display:flex; flex-direction:column; justify-content:center; padding:0 80px 0 60px; }
+  .split .txt .mono { font-size:11px; letter-spacing:0.1em; color:#666; text-transform:uppercase; margin-bottom:28px; }
+  .split .txt h2 { font-size:48px; color:#111; margin-bottom:32px; line-height:1.1; }
+  .split .txt p { font-family:'Cormorant Garamond', serif; font-weight:400; font-size:22px; line-height:1.6; color:#2c2c2a; max-width:460px; text-transform:none; }
+  .split .ph-side { position:relative; background-size:cover; background-position:center; min-height:75vh; }
+  .signature-bar {
+    position:absolute; bottom:0; left:0; width:100%; background:#111; color:#fff;
+    padding:16px 24px; font-family:'IBM Plex Mono',monospace; font-size:11px;
+    letter-spacing:0.12em; text-transform:uppercase; display:flex; justify-content:space-between;
+  }
+
+  /* ============ REINA VISION BUILDER ============ */
+  .builder-section { background:#111; padding:120px 80px; border-top:1px solid rgba(255,255,255,0.08); }
+  .builder-head { margin-bottom:56px; }
+  .builder-head .mono { font-size:11px; letter-spacing:0.1em; color:rgba(255,255,255,0.4); text-transform:uppercase; margin-bottom:16px; display:block; }
+  .builder-head h2 { font-size:42px; color:#fff; font-weight:500; }
+  .builder-desc { font-family:'Cormorant Garamond', serif; font-style:italic; font-weight:400; font-size:20px; color:rgba(255,255,255,0.6); margin-top:14px; }
+  .style-option h3 { font-family:'Cormorant Garamond',serif; font-weight:500; font-size:24px; margin-bottom:8px; text-transform:none; letter-spacing:0; }
+  .style-grid { display:grid; grid-template-columns:repeat(3, 1fr); gap:20px; margin-bottom:48px; }
+  .style-option { border:1px solid rgba(255,255,255,0.15); padding:32px 24px; cursor:pointer; transition:all 0.3s ease; background:#0a0a0a; text-align:left; }
+  .style-option:hover { border-color:rgba(255,255,255,0.5); background:#151515; }
+  .style-option.active { border-color:#fff; background:#fff; color:#000; }
+  .style-option .opt-num { font-family:'IBM Plex Mono',monospace; font-size:10px; opacity:0.5; margin-bottom:16px; display:block; }
+  .style-option p { font-size:12px; opacity:0.6; line-height:1.5; }
+
+  /* ============ MOODBOARD BUILDER (interactive, opens on card 03) ============ */
+  .moodboard-panel {
+    display:none; overflow:hidden; max-height:0; opacity:0;
+    transition:max-height 0.6s ease, opacity 0.6s ease;
+    background:#0a0a0a; border:1px solid rgba(255,255,255,0.12); margin-bottom:48px;
+  }
+  .moodboard-panel.open { display:block; max-height:800px; opacity:1; }
+  .moodboard-panel-inner { padding:48px; }
+  .moodboard-panel-inner .mono { font-size:11px; letter-spacing:0.1em; color:rgba(255,255,255,0.4); text-transform:uppercase; }
+  .moodboard-panel-inner h3 { font-family:'Cormorant Garamond',serif; font-weight:500; font-size:28px; color:#fff; margin:14px 0 12px; text-transform:none; letter-spacing:0; }
+  .moodboard-desc { font-family:'Inter',sans-serif; font-size:14px; line-height:1.6; color:rgba(255,255,255,0.55); max-width:520px; margin-bottom:32px; }
+  .mood-style-row { display:grid; grid-template-columns:repeat(4,1fr); gap:14px; margin-bottom:36px; }
+  .mood-tile {
+    border:1px solid rgba(255,255,255,0.15); padding:22px 12px; text-align:center; cursor:pointer;
+    font-family:'IBM Plex Mono',monospace; font-size:11px; letter-spacing:0.08em; text-transform:uppercase;
+    color:rgba(255,255,255,0.6); transition:all 0.25s;
+  }
+  .mood-tile:hover { border-color:rgba(255,255,255,0.5); color:#fff; }
+  .mood-tile.active { border-color:#fff; background:#fff; color:#000; }
+  .moodboard-upload-row { display:grid; grid-template-columns:1fr 1fr; gap:32px; align-items:end; }
+  .moodboard-panel .file-input-wrapper { position:relative; display:block; }
+  .moodboard-panel .file-btn {
+    border:1px dashed rgba(255,255,255,0.3); padding:16px 20px; color:#fff;
+    font-family:'IBM Plex Mono',monospace; font-size:12px; text-transform:uppercase; text-align:center;
+    display:block; cursor:pointer; transition:border-color 0.25s;
+  }
+  .moodboard-panel .file-btn:hover { border-color:#fff; }
+  .moodboard-panel input[type="file"] { position:absolute; inset:0; opacity:0; cursor:pointer; }
+  .moodboard-panel .input-group label { font-family:'IBM Plex Mono',monospace; font-size:11px; letter-spacing:0.05em; color:rgba(255,255,255,0.5); text-transform:uppercase; display:block; margin-bottom:12px; }
+  .moodboard-panel .input-group input { width:100%; background:none; border:none; border-bottom:1px solid rgba(255,255,255,0.2); padding:12px 0; color:#fff; font-family:'Inter',sans-serif; font-size:14px; }
+  .moodboard-panel .input-group input:focus { outline:none; border-color:#fff; }
+  .inspo-confirm { display:block; margin-top:24px; color:rgba(255,255,255,0.5); min-height:1em; font-size:11px; }
+  .inspo-upload { max-width:480px; margin-bottom:48px; }
+  .inspo-upload label { font-family:'IBM Plex Mono',monospace; font-size:11px; letter-spacing:0.05em; color:rgba(255,255,255,0.5); text-transform:uppercase; display:block; margin-bottom:14px; }
+  .inspo-upload .file-input-wrapper { position:relative; display:block; max-width:100%; }
+  .inspo-upload .file-btn { border:1px dashed rgba(255,255,255,0.3); padding:16px 20px; }
+  .inspo-upload input[type="file"] { position:absolute; inset:0; opacity:0; cursor:pointer; }
+  .inspo-confirm { display:block; margin-top:14px; color:rgba(255,255,255,0.5); min-height:1em; font-size:11px; }
+
+  .builder-inputs { display:grid; grid-template-columns:1fr 1fr; gap:32px; max-width:900px; margin-bottom:40px; }
+  .builder-inputs .full { grid-column:1/-1; }
+  .input-group { display:flex; flex-direction:column; gap:12px; }
+  .input-group label { font-family:'IBM Plex Mono',monospace; font-size:11px; letter-spacing:0.05em; color:rgba(255,255,255,0.5); text-transform:uppercase; }
+  .input-group input, .input-group textarea { background:none; border:none; border-bottom:1px solid rgba(255,255,255,0.2); padding:12px 0; color:#fff; font-family:'Inter', sans-serif; font-size:15px; transition:border-color 0.3s; resize:vertical; }
+  .input-group input:focus, .input-group textarea:focus { outline:none; border-color:#fff; }
+  .file-input-wrapper { position:relative; display:inline-block; max-width:320px; }
+  .file-btn { border:1px dashed rgba(255,255,255,0.3); padding:14px 20px; display:block; font-family:'IBM Plex Mono',monospace; font-size:12px; text-transform:uppercase; text-align:center; cursor:pointer; }
+  .file-btn:hover { border-color:#fff; }
+  .input-group input[type="file"] { position:absolute; left:0; top:0; opacity:0; width:100%; height:100%; cursor:pointer; }
+  .builder-actions { display:flex; align-items:center; gap:28px; flex-wrap:wrap; }
+  .success-msg { display:none; font-family:'Cormorant Garamond', serif; font-style:italic; font-size:24px; color:rgba(255,255,255,0.85); line-height:1.6; margin-top:32px; max-width:600px; text-transform:none; }
+
+  /* ============ CTA BAND ============ */
+  .cta-band { background:#000; color:#fff; text-align:center; padding:140px 40px; border-top:1px solid rgba(255,255,255,0.08); }
+  .cta-band .mono { font-size:11px; letter-spacing:0.12em; color:rgba(255,255,255,0.4); text-transform:uppercase; margin-bottom:24px; }
+  .cta-band h2 { font-size:52px; margin-bottom:42px; line-height:1.2; }
+
+  /* ============ DYNAMIC PORTFOLIO SUBPAGES ============ */
+  .portfolio-view-wrapper { display:none; background:#000; min-height:100vh; padding:100px 80px; }
+  .portfolio-back-btn { font-family:'IBM Plex Mono',monospace; font-size:12px; text-transform:uppercase; color:rgba(255,255,255,0.5); cursor:pointer; margin-bottom:48px; display:inline-block; transition:color 0.25s; }
+  .portfolio-back-btn:hover { color:#fff; }
+  .portfolio-header { margin-bottom:64px; max-width:800px; }
+  .portfolio-header .meta-tag { font-family:'IBM Plex Mono',monospace; font-size:11px; color:rgba(255,255,255,0.4); text-transform:uppercase; margin-bottom:20px; display:block; }
+  .portfolio-header h2 { font-size:56px; line-height:1.05; margin-bottom:32px; color:#fff; }
+  .portfolio-header p { font-family:'Cormorant Garamond', serif; font-style:italic; font-weight:300; font-size:24px; line-height:1.6; color:rgba(255,255,255,0.6); text-transform:none; }
+  .portfolio-showcase-grid { display:grid; grid-template-columns:1fr 1fr; gap:32px; margin-top:64px; max-width:1100px; }
+  .portfolio-img-box { background:#111; aspect-ratio:3/4; background-size:cover; background-position:center; }
+
+  /* ============ FOOTER (light) ============ */
+  .footer { background:#EDEDEA; color:#111; padding:80px 60px 40px; display:grid; grid-template-columns:1.5fr 1fr 1fr; gap:60px; border-top:1px solid rgba(0,0,0,0.05); }
+  .footer-title { font-family:'Cormorant Garamond', serif; font-size:28px; font-weight:400; margin-bottom:18px; letter-spacing:0.05em; text-transform:uppercase; }
+  .footer .mono { font-size:11px; letter-spacing:0.08em; color:#666; text-transform:uppercase; margin-bottom:16px; }
+  .footer p { font-size:14px; color:#3a3a38; line-height:1.6; font-weight:300; }
+  .footer a { display:block; color:#111; text-decoration:none; font-size:14px; margin-bottom:10px; width:fit-content; font-weight:300; }
+  .footer a:hover { color:#666; }
+  .footer-bottom { grid-column:1/-1; border-top:1px solid rgba(0,0,0,0.08); margin-top:40px; padding-top:24px; font-family:'IBM Plex Mono',monospace; font-size:11px; color:#666; letter-spacing:0.06em; display:flex; justify-content:space-between; }
+
+
+  /* ============================================================
+     MOBILNÍ VERZE (do 768px šířky obrazovky)
+     ============================================================ */
+  @media (max-width: 768px) {
+
+    /* --- NAV --- */
+    .nav { padding:0 20px; height:64px; }
+    .nav img { height:30px; }
+    .nav-links { gap:14px; }
+    .nav-links a { font-size:9px; letter-spacing:0.06em; }
+    .nav-meta { display:none; }
+
+    /* --- HERO (homepage) --- */
+    .hero { padding:0 24px; min-height:auto; padding-top:64px; padding-bottom:64px; }
+    .hero-content, .hero-side { max-width:100%; }
+    .wordmark, .hero h1 { font-size:38px !important; letter-spacing:0.02em; }
+    .hero-sub, .hero p { font-size:15px !important; max-width:100%; }
+    .hero-studio-tag, .edition, .about-hero .tag, .pricing-hero .tag, .contact-hero .tag, .portfolio-hero .tag { font-size:10px; margin-bottom:16px; }
+    .spine { display:none; }
+    .btn, .cf-btn-dark, .cta-quote-btn { width:100%; justify-content:center; text-align:center; padding:14px 20px; font-size:10px; }
+
+    /* --- ABOUT / PRICING / CONTACT / PORTFOLIO HERO --- */
+    .about-hero, .pricing-hero, .contact-hero, .portfolio-hero { padding:0 24px; min-height:auto; padding-top:64px; padding-bottom:56px; }
+    .about-hero h1, .pricing-hero h1, .contact-hero h1, .portfolio-hero h1 { font-size:34px !important; max-width:100%; }
+    .about-hero p, .pricing-hero p, .contact-hero p, .portfolio-hero p { font-size:14px !important; max-width:100%; }
+
+    /* --- LOOKS GRID (poslední produkce) --- */
+    .looks { padding:56px 20px; }
+    .looks-head { flex-direction:column; align-items:flex-start; gap:12px; margin-bottom:28px; }
+    .looks-head h2 { font-size:28px; }
+    .looks-grid { grid-template-columns:1fr; gap:16px; }
+
+    /* --- MANIFESTO / FOUNDER SPLIT --- */
+    .split, .founder-split { grid-template-columns:1fr; min-height:auto; }
+    .split .txt, .founder-split .txt { padding:40px 24px; }
+    .split .txt h2, .founder-split .txt h2 { font-size:30px; }
+    .split .ph-side, .split .ph, .founder-split .photo { min-height:280px; height:280px; }
+    .about-signature { min-height:280px; }
+
+    /* --- REINA VISION BUILDER --- */
+    .builder-section { padding:64px 20px; }
+    .builder-head h2 { font-size:28px; }
+    .style-grid { grid-template-columns:1fr; gap:14px; margin-bottom:32px; }
+    .moodboard-upload-row, .cf-inputs, .builder-inputs { grid-template-columns:1fr; gap:18px; }
+    .mood-style-row { grid-template-columns:repeat(2,1fr); }
+    .moodboard-panel-inner { padding:28px 20px; }
+
+    /* --- CTA BAND --- */
+    .cta-band { padding:64px 24px; }
+    .cta-band h2 { font-size:30px; }
+
+    /* --- PILLARS (O nás) --- */
+    .pillars { padding:64px 20px; }
+    .pillars-grid { grid-template-columns:1fr; gap:36px; }
+    .pillars-head h2 { font-size:28px; }
+
+    /* --- STATEMENT BAND (O nás) --- */
+    .statement-band { padding:64px 24px; }
+    .statement-band h2 { font-size:30px; }
+
+    /* --- PHILOSOPHY COMPARE (Ceník) --- */
+    .philosophy-compare { padding:56px 20px; }
+    .compare-grid { grid-template-columns:1fr; gap:36px; }
+
+    /* --- PACKAGES / B2B GRID (Ceník) --- */
+    .packages-section, .b2b-section { padding:64px 20px; }
+    .packages-head h2, .b2b-head h2 { font-size:28px; }
+    .packages-grid, .b2b-grid { grid-template-columns:1fr; gap:20px; }
+
+    /* --- RULE BAND / TERMS (Ceník) --- */
+    .rule-band { padding:64px 24px; }
+    .rule-band h2 { font-size:26px; }
+    .terms-strip { padding:48px 20px; }
+    .terms-grid { grid-template-columns:1fr 1fr; gap:24px; }
+
+    /* --- CONTACT PAGE --- */
+    .contact-body { grid-template-columns:1fr; padding:56px 20px; gap:48px; }
+    .contact-form-wrap h2 { font-size:26px; }
+
+    /* --- PORTFOLIO PAGE --- */
+    .portfolio-filters { padding:0 20px 28px; gap:8px; }
+    .filter-tab { padding:10px 14px; font-size:10px; }
+    .portfolio-grid-wrap { padding:40px 20px 64px; }
+    .portfolio-grid { grid-template-columns:1fr; gap:16px; }
+    .project-detail { padding:56px 20px; }
+    .project-header h2 { font-size:32px; }
+    .project-header p { font-size:17px; }
+    .project-showcase { grid-template-columns:1fr; gap:16px; }
+    .project-showcase .box { aspect-ratio:4/3; }
+
+    /* --- FOOTER --- */
+    .footer { grid-template-columns:1fr; gap:32px; padding:48px 20px 28px; }
+    .footer-bottom { flex-direction:column; gap:8px; text-align:left; }
+  }
+
+  @media (max-width: 420px) {
+    .wordmark, .hero h1 { font-size:32px !important; }
+    .about-hero h1, .pricing-hero h1, .contact-hero h1, .portfolio-hero h1 { font-size:28px !important; }
+  }
+
+</style>
+</head>
+<body>
+
+<nav class="nav">
+  <img src="images/logo-white.png" alt="REINA PRODUCTION">
+  <div class="nav-links">
+    <a href="o-nas.html">O nás</a><a href="sluzby-cenik.html">Služby</a><a href="portfolio.html">Portfolio</a><a href="kontakt.html">Kontakt</a>
+  </div>
+  <div class="nav-meta">Praha · N°01 / 2026</div>
+</nav>
+
+<div id="homepage-view">
+
+<section class="hero">
+  <span class="hero-studio-tag">Creative Production Studio · Praha</span>
+  <h1>Reina Production</h1>
+  <p>Vizuální identita, art direction a produkce kampaní pro firmy, značky a ženy, které vědí, co chtějí.</p>
+  <a class="btn" href="#builder">[ Rezervovat produkci → ]</a>
+  <div class="spine">Reina Production · Praha · Est. 2025</div>
+</section>
+
+<section class="looks">
+  <div class="looks-head">
+    <h2>Poslední produkce</h2>
+    <span class="mono">Look 01 · 03</span>
+  </div>
+  <div class="looks-grid">
+    <div class="look-card" data-target="pf-cover">
+      <div class="ph" style="background-image:url(images/cover-album.jpg); background-position:center 25%;"></div>
+      <span class="tag">Look 01 · Cover / B2B</span>
+    </div>
+    <div class="look-card" data-target="pf-klinika">
+      <div class="ph" style="background-image:url(images/klinika.jpg);"></div>
+      <span class="tag">Look 02 · Klinika / B2B</span>
+    </div>
+    <div class="look-card" data-target="pf-zazitkove">
+      <div class="ph" style="background-image:url(images/the-muse-natalie.jpg); background-position:center 30%;"></div>
+      <span class="tag">Look 03 · The Muse</span>
+    </div>
+  </div>
+</section>
+
+<section class="manifesto-section">
+  <div class="split">
+    <div class="txt">
+      <span class="mono">The Standard · 01</span>
+      <h2>Nehledáme kompromisy.</h2>
+      <p>Každý projekt je autorským procesem, který z vás nebo vašeho brandu vytáhne tu nejsilnější verzi. Syrovou. Ikonickou. Nedotknutelnou.</p>
+    </div>
+    <div class="ph-side" style="background-image:url(images/red-carpet.jpg); background-position:center 60%;">
+      <div class="signature-bar">
+        <span>Mariam C.</span>
+        <span>Founder &amp; Art Director</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="builder-section" id="builder">
+  <div class="builder-head">
+    <h2>Poptávka &amp; kalkulace</h2>
+    <p class="builder-desc">Vyberte si váš směr produkce.</p>
+  </div>
+
+  <div class="style-grid">
+    <div class="style-option active" data-style="zazitkove">
+      <span class="opt-num">01</span>
+      <h3>Zážitkové focení</h3>
+      <p>Portrét, osobní transformace, focení pro jednotlivce.</p>
+    </div>
+    <div class="style-option" data-style="kampan">
+      <span class="opt-num">02</span>
+      <h3>Kampaň pro značku</h3>
+      <p>Produkce a art direction pro firmy, kliniky a lifestyle brandy.</p>
+    </div>
+    <div class="style-option" data-style="bespoke">
+      <span class="opt-num">03</span>
+      <h3>Reina Vision</h3>
+      <p>Sestavte si vlastní vizuální koncept.</p>
+    </div>
+  </div>
+
+  <div class="moodboard-panel" id="moodboard-panel">
+    <div class="moodboard-panel-inner">
+      <span class="mono">Moodboard Builder</span>
+      <h3>Postavte si vizuální koncept.</h3>
+      <p class="moodboard-desc">Vyberte styl, který vás oslovuje, a přidejte vlastní inspiraci. Postavíme koncept přesně kolem vaší vize.</p>
+
+      <div class="mood-style-row">
+        <div class="mood-tile active" data-mood="editorial">
+          <span class="mood-tile-label">Editorial</span>
+        </div>
+        <div class="mood-tile" data-mood="street">
+          <span class="mood-tile-label">Street</span>
+        </div>
+        <div class="mood-tile" data-mood="minimal">
+          <span class="mood-tile-label">Minimal</span>
+        </div>
+        <div class="mood-tile" data-mood="bold">
+          <span class="mood-tile-label">Bold</span>
+        </div>
+      </div>
+
+      <div class="moodboard-upload-row">
+        <div class="file-input-wrapper">
+          <span class="file-btn" id="inspo-file-label">Nahrát fotky z mobilu (více souborů)</span>
+          <input type="file" id="inspo-file-input" multiple accept="image/*">
+        </div>
+        <div class="input-group">
+          <label>Odkaz na moodboard</label>
+          <input type="url" id="moodboard-link-input" placeholder="Pinterest, Instagram sbírka...">
+        </div>
+      </div>
+      <span class="inspo-confirm mono" id="inspo-confirm"></span>
+    </div>
+  </div>
+
+  <form id="builder-form">
+    <div class="builder-inputs">
+      <div class="input-group">
+        <label>Jméno a příjmení</label>
+        <input type="text" name="name" required>
+      </div>
+      <div class="input-group">
+        <label>E-mail</label>
+        <input type="email" name="email" required>
+      </div>
+      <div class="input-group full">
+        <label>Popište svou vizi</label>
+        <textarea name="message" rows="4" placeholder="Napište pár vět o tom, co si představujete..."></textarea>
+      </div>
+    </div>
+    <div class="builder-actions">
+      <button type="submit" class="btn">[ Odeslat poptávku → ]</button>
+    </div>
+    <p class="success-msg" id="success-msg">Děkujeme za zprávu. Ozveme se vám do 48 hodin s návrhem konceptu a kalkulací.</p>
+  </form>
+</section>
+
+<section class="cta-band">
+  <div class="mono">Rezervace na sezónu 2026 jsou otevřené</div>
+  <h2>Pojďme natočit váš standard.</h2>
+  <a class="btn" href="#builder">[ Napsat nám → ]</a>
+</section>
+
+<footer class="footer">
+  <div>
+    <div class="footer-title">Reina Production</div>
+    <p>Creative Production Studio.<br>Praha.</p>
+  </div>
+  <div>
+    <div class="mono">Navigace</div>
+    <a href="o-nas.html">O nás</a><a href="sluzby-cenik.html">Služby</a><a href="portfolio.html">Portfolio</a><a href="kontakt.html">Kontakt</a>
+  </div>
+  <div>
+    <div class="mono">Kontakt</div>
+    <a href="mailto:reina.productionss@gmail.com">reina.productionss@gmail.com</a>
+    <a href="https://instagram.com/reina_production" target="_blank">@reina_production</a>
+  </div>
+  <div class="footer-bottom">
+    <span>© 2026 Reina Connections s.r.o.</span>
+    <span>Praha</span>
+  </div>
+</footer>
+
+</div>
+<!-- /#homepage-view -->
+
+<div class="portfolio-view-wrapper" id="pf-cover">
+  <span class="portfolio-back-btn" data-back>&larr; Zpět na homepage</span>
+  <div class="portfolio-header">
+    <span class="meta-tag">Portfolio · Look 01 · B2B</span>
+    <h2>Cover Production</h2>
+    <p>Art direction pro hudební a lifestyle cover. Koncept, styling a produkce v jednom dni.</p>
+  </div>
+  <div class="portfolio-showcase-grid">
+    <div class="portfolio-img-box" style="background-image:url(images/cover-album.jpg); background-position:center 15%;"></div>
+    <div class="portfolio-img-box" style="background-image:url(images/cover-album.jpg); background-position:center 60%;"></div>
+  </div>
+</div>
+
+<div class="portfolio-view-wrapper" id="pf-klinika">
+  <span class="portfolio-back-btn" data-back>&larr; Zpět na homepage</span>
+  <div class="portfolio-header">
+    <span class="meta-tag">Portfolio · Look 02 · B2B</span>
+    <h2>Klinika Brand Campaign</h2>
+    <p>Týmová a produktová produkce pro beauty a wellness kliniku. Konzistentní vizuální jazyk napříč kampaní.</p>
+  </div>
+  <div class="portfolio-showcase-grid">
+    <div class="portfolio-img-box" style="background-image:url(images/klinika.jpg);"></div>
+    <div class="portfolio-img-box" style="background-image:url(images/klinika.jpg); background-position:top;"></div>
+  </div>
+</div>
+
+<div class="portfolio-view-wrapper" id="pf-zazitkove">
+  <span class="portfolio-back-btn" data-back>&larr; Zpět na homepage</span>
+  <div class="portfolio-header">
+    <span class="meta-tag">Portfolio · Look 03 · B2C</span>
+    <h2>Zážitkové Focení</h2>
+    <p>Osobní transformace před objektivem. Vizáž, styling a vedení, které ti pomůže ukázat tvou nejsilnější verzi.</p>
+  </div>
+  <div class="portfolio-showcase-grid">
+    <div class="portfolio-img-box" style="background-image:url(images/the-muse-natalie.jpg); background-position:center 20%;"></div>
+    <div class="portfolio-img-box" style="background-image:url(images/red-carpet.jpg);"></div>
+  </div>
+</div>
+
+<script>
+  var TRANSITION_OUT = 500;  // matches #homepage-view.leaving transition
+  var TRANSITION_IN  = 700;  // matches .portfolio-view-wrapper.visible transition
+
+  // Navigate to portfolio subpages with fade + slide animation
+  document.querySelectorAll('.look-card[data-target]').forEach(function(card) {
+    card.addEventListener('click', function() {
+      var target = card.getAttribute('data-target');
+      var home = document.getElementById('homepage-view');
+      var dest = document.getElementById(target);
+
+      home.classList.add('leaving');
+
+      setTimeout(function() {
+        home.style.display = 'none';
+        document.querySelectorAll('.portfolio-view-wrapper').forEach(function(v) {
+          v.style.display = 'none';
+          v.classList.remove('visible');
+        });
+        dest.style.display = 'block';
+        window.scrollTo(0,0);
+        // force reflow so the fade-in transition actually runs
+        void dest.offsetWidth;
+        dest.classList.add('visible');
+      }, TRANSITION_OUT);
+    });
+  });
+
+  document.querySelectorAll('[data-back]').forEach(function(btn) {
+    btn.addEventListener('click', function() {
+      var current = btn.closest('.portfolio-view-wrapper');
+      var home = document.getElementById('homepage-view');
+
+      current.classList.remove('visible');
+
+      setTimeout(function() {
+        current.style.display = 'none';
+        home.style.display = 'block';
+        window.scrollTo(0,0);
+        void home.offsetWidth;
+        home.classList.remove('leaving');
+      }, TRANSITION_IN);
+    });
+  });
+
+  // Style picker in Vision Builder (lower section)
+  // Clicking "03 / Bespoke produkce" opens the interactive Moodboard Builder below it
+  var moodboardPanel = document.getElementById('moodboard-panel');
+  document.querySelectorAll('.style-option').forEach(function(opt) {
+    opt.addEventListener('click', function() {
+      document.querySelectorAll('.style-option').forEach(function(o) { o.classList.remove('active'); });
+      opt.classList.add('active');
+
+      if (opt.getAttribute('data-style') === 'bespoke') {
+        moodboardPanel.classList.add('open');
+        setTimeout(function() {
+          moodboardPanel.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        }, 150);
+      } else {
+        moodboardPanel.classList.remove('open');
+      }
+    });
+  });
+
+  // Mood style tiles inside the Moodboard Builder
+  document.querySelectorAll('.mood-tile').forEach(function(tile) {
+    tile.addEventListener('click', function() {
+      document.querySelectorAll('.mood-tile').forEach(function(t) { t.classList.remove('active'); });
+      tile.classList.add('active');
+    });
+  });
+
+  // Multi-file inspo upload (inside Moodboard Builder)
+  var inspoFileInput = document.getElementById('inspo-file-input');
+  var inspoFileLabel = document.getElementById('inspo-file-label');
+  var inspoConfirm = document.getElementById('inspo-confirm');
+  inspoFileInput.addEventListener('change', function() {
+    if (inspoFileInput.files.length > 0) {
+      inspoFileLabel.textContent = inspoFileInput.files.length + ' soubor(ů) vybráno';
+      inspoConfirm.textContent = 'Inspirace uložena. Uvidíme ji při přípravě konceptu.';
+    }
+  });
+
+  // Moodboard link input
+  var moodboardLinkInput = document.getElementById('moodboard-link-input');
+  moodboardLinkInput.addEventListener('change', function() {
+    if (moodboardLinkInput.value.trim().length > 0) {
+      inspoConfirm.textContent = 'Odkaz na moodboard uložen. Díky za inspiraci.';
+    }
+  });
+
+  // Form submit -> success message (form stays visible as a fixed anchor, nothing gets hidden)
+  document.getElementById('builder-form').addEventListener('submit', function(e) {
+    e.preventDefault();
+    document.getElementById('success-msg').style.display = 'block';
+  });
+</script>
+
+</body>
+</html>
